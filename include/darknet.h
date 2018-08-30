@@ -8,16 +8,8 @@
 #define SECRET_NUM -1234
 extern int gpu_index;
 
-#ifdef GPU
-    #define BLOCK 512
-
-    #include "cuda_runtime.h"
-    #include "curand.h"
-    #include "cublas_v2.h"
-
-    #ifdef CUDNN
-    #include "cudnn.h"
-    #endif
+#ifdef OPENACC
+    #include <openacc.h>
 #endif
 
 #ifndef __cplusplus
@@ -110,8 +102,8 @@ typedef struct{
     int t;
 } update_args;
 
-struct network;
-typedef struct network network;
+//struct network;
+//typedef struct network network;
 
 struct layer;
 typedef struct layer layer;
@@ -431,7 +423,7 @@ typedef enum {
     CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM
 } learning_rate_policy;
 
-typedef struct network{
+typedef struct {
     int n;
     int batch;
     size_t *seen;
@@ -529,7 +521,7 @@ typedef struct detection{
     int sort_class;
 } detection;
 
-typedef struct matrix{
+typedef struct {
     int rows, cols;
     float **vals;
 } matrix;
@@ -548,7 +540,7 @@ typedef enum {
     CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA, ISEG_DATA
 } data_type;
 
-typedef struct load_args{
+typedef struct {
     int threads;
     char **paths;
     char *path;
@@ -593,13 +585,13 @@ load_args get_base_args(network *net);
 
 void free_data(data d);
 
-typedef struct node{
+typedef struct {
     void *val;
     struct node *next;
     struct node *prev;
 } node;
 
-typedef struct list{
+typedef struct {
     int size;
     node *front;
     node *back;
