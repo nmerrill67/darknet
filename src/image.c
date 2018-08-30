@@ -5,11 +5,6 @@
 #include <stdio.h>
 #include <math.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
 int windows = 0;
 
 float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
@@ -697,6 +692,7 @@ void save_image_jpg(image p, const char *name)
 }
 #endif
 
+/*
 void save_image_png(image im, const char *name)
 {
     char buff[256];
@@ -713,14 +709,10 @@ void save_image_png(image im, const char *name)
     free(data);
     if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
-
+*/
 void save_image(image im, const char *name)
 {
-#ifdef OPENCV
     save_image_jpg(im, name);
-#else
-    save_image_png(im, name);
-#endif
 }
 
 
@@ -1442,7 +1434,7 @@ void test_resize(char *filename)
 #endif
 }
 
-
+/*
 image load_image_stb(char *filename, int channels)
 {
     int w, h, c;
@@ -1466,14 +1458,10 @@ image load_image_stb(char *filename, int channels)
     free(data);
     return im;
 }
-
+*/
 image load_image(char *filename, int w, int h, int c)
 {
-#ifdef OPENCV
     image out = load_image_cv(filename, c);
-#else
-    image out = load_image_stb(filename, c);
-#endif
 
     if((h && w) && (h != out.h || w != out.w)){
         image resized = resize_image(out, w, h);

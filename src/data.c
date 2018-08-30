@@ -1089,7 +1089,7 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 void *load_thread(void *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
+    load_args a = *(load_args*)ptr;
     if(a.exposure == 0) a.exposure = 1;
     if(a.saturation == 0) a.saturation = 1;
     if(a.aspect == 0) a.aspect = 1;
@@ -1134,7 +1134,7 @@ void *load_thread(void *ptr)
 pthread_t load_data_in_thread(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    load_args *ptr = calloc(1, sizeof(load_args));
     *ptr = args;
     if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
     return thread;
@@ -1171,7 +1171,7 @@ void *load_threads(void *ptr)
 
 void load_data_blocking(load_args args)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    load_args *ptr = calloc(1, sizeof(load_args));
     *ptr = args;
     load_thread(ptr);
 }
@@ -1179,7 +1179,7 @@ void load_data_blocking(load_args args)
 pthread_t load_data(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    load_args *ptr = calloc(1, sizeof(load_args));
     *ptr = args;
     if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
     return thread;

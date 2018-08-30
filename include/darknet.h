@@ -12,6 +12,10 @@ extern int gpu_index;
     #include <openacc.h>
 #endif
 
+#ifndef OPENCV
+    #define OPENCV 1
+#endif
+
 #ifndef __cplusplus
     #ifdef OPENCV
     #include "opencv2/highgui/highgui_c.h"
@@ -102,8 +106,8 @@ typedef struct{
     int t;
 } update_args;
 
-//struct network;
-//typedef struct network network;
+struct network;
+typedef struct network network;
 
 struct layer;
 typedef struct layer layer;
@@ -112,11 +116,11 @@ struct layer{
     LAYER_TYPE type;
     ACTIVATION activation;
     COST_TYPE cost_type;
-    void (*forward)   (struct layer, struct network);
-    void (*backward)  (struct layer, struct network);
+    void (*forward)   (struct layer, network);
+    void (*backward)  (struct layer, network);
     void (*update)    (struct layer, update_args);
-    void (*forward_gpu)   (struct layer, struct network);
-    void (*backward_gpu)  (struct layer, struct network);
+    void (*forward_gpu)   (struct layer, network);
+    void (*backward_gpu)  (struct layer, network);
     void (*update_gpu)    (struct layer, update_args);
     int batch_normalize;
     int shortcut;
@@ -423,7 +427,7 @@ typedef enum {
     CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM
 } learning_rate_policy;
 
-typedef struct {
+typedef struct network{
     int n;
     int batch;
     size_t *seen;
